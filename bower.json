@@ -1,0 +1,23 @@
+{
+  "name": "simple-carousel",
+  "homepage": "https://github.com/Anonymous-Stranger/simple-carousel",
+  "authors": [
+    "Anonymous-Stranger <akashgaonkar@gmail.com>"
+  ],
+  "description": "A simple Polymer carousel using neon-animated-pages and paper-radio-button",
+  "main": "simple-carousel.html",
+  "keywords": [
+    "carousel",
+    "web-components",
+    "polymer"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "../",
+    "test",
+    "tests"
+  ]
+}
