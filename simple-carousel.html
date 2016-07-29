@@ -1,0 +1,161 @@
+<!--
+  
+  <simple-carousel>
+  author: Ag
+
+  Creates a basic carousel.
+  
+  Forewarning: Carousels have been shown to be awful.
+  http://conversionxl.com/dont-use-automatic-image-sliders-or-carousels-ignore-the-fad/
+  
+  At minimum, it is highly recommended that prevent-auto-transition be used.
+
+-->
+
+<link rel="import" href="../polymer/polymer.html"/>
+
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html"/>
+
+<link rel="import" href="../paper-radio-button/paper-radio-button.html"/>
+<link rel="import" href="../paper-radio-group/paper-radio-group.html"/>
+<link rel="import" href="../paper-styles/color.html"/>
+
+<link rel="import" href="../neon-animation/animations/slide-left-animation.html"/>
+<link rel="import" href="../neon-animation/animations/slide-from-right-animation.html"/>
+<link rel="import" href="../neon-animation/neon-animated-pages.html"/>
+
+<dom-module id="simple-carousel">
+  
+  <template strip-whitespace>
+    
+    <style>
+      
+      :host {
+        --paper-radio-button-unchecked-color: var(--simple-carousel-button-color, var(--primary-text-color));
+        --paper-radio-button-checked-color: var(--simple-carousel-button-color, var(--primary-text-color));
+
+        display: block;
+      }
+
+      #carousel {
+        display: block;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      #slide-radios {
+        @apply(--layout-horizontal);
+        @apply(--layout-center-center);
+
+        position: relative;
+        
+        height: 3rem;
+        top: -3rem;
+        
+        z-index: 1;
+        width: 100%;
+      }
+
+    </style>
+
+    <neon-animated-pages id="carousel" selected="[[visibleSlideIndex]]" entry-animation="slide-from-right-animation" exit-animation="slide-left-animation">
+        <content select="carousel-slide"></content>
+    </neon-animated-pages>
+
+    <paper-radio-group id="slide-radios" selected="{{visibleSlideIndex}}">
+      <template is="dom-repeat" items="[[_slides]]">
+        <!-- 
+          Note the space before [[index]] below. This is because "0" evaluates
+          to false, but " 0" evaluates to true, while still being convertible to a number.
+          This ensures that paper-radio-group .selected 
+        -->
+        <paper-radio-button name=" [[index]]"></paper-radio-button>
+      </template>
+    </paper-radio-group>
+
+  </template>
+
+  <script>
+    
+    Polymer({
+
+      is: 'simple-carousel',
+
+      properties: {
+
+        /**
+         * The time in ms to wait before moving to the next slide.
+         * @type {Number}
+         */
+        nextSlideDelay: {
+          type: Number,
+          value: 10000
+        },
+
+        /**
+         * Prevents the slides from automatically changing.
+         * @type {Boolean}
+         */
+        preventAutoTransition: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * The index of the currently visible slide.
+         * @type {Number}
+         */
+        visibleSlideIndex: {
+          type: Number,
+          value: 0
+        }
+
+      },
+
+      observers: [
+        'onUpdateVisibleSlideIndex(preventAutoTransition, visibleSlideIndex)'
+      ],
+
+      attached: function() {
+        this.set(
+          "_slides", Polymer.dom(this.$.carousel).getEffectiveChildNodes()
+        );
+      },
+
+      /**
+       * Moves to the next carousel slide.
+       */
+      nextSlide: function() {
+        this.set('visibleSlideIndex',
+          (this.visibleSlideIndex + 1) % this._slides.length
+        );
+      },
+
+      /**
+       * Debounces the next-slide action every time the visible
+       * @param {Boolean} preventAutoTransition Whether to automatically move
+       *                                        to the next time after a delay.
+       */
+      onUpdateVisibleSlideIndex: function(preventAutoTransition) {
+        
+        var task = 'simple-carousel-next-slide';
+
+        if (preventAutoTransition) {
+          this.cancelDebouncer(task);
+          return;
+        }
+
+        this.debounce(
+          task, this.nextSlide, this.nextSlideDelay
+        );
+      }
+
+    });
+
+  </script>
+
+</dom-module>
+
+
+

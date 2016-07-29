@@ -1,0 +1,86 @@
+<!--
+  
+  Demo of <simple-carousel>
+  author: Ag
+
+-->
+
+<!DOCTYPE html>
+
+<html>
+  
+  <head>
+    
+    <title>Simple Carousel Demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="../simple-carousel.html"/>
+    <link rel="import" href="../carousel-slide.html"/>
+
+    <style is="custom-style">
+      
+      body {
+        margin: 0;
+      }
+
+      simple-carousel {
+        width: 100%;
+        height: 20rem;
+
+        --simple-carousel-button-color: white;
+      }
+
+      carousel-slide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: white;
+        font-size: 5rem;
+      }
+
+      .color_1 {
+        background-color: #6A1B9A;
+      }
+
+      .color_2 {
+        background-color: #0288D1;
+      }
+
+      .color_3 {
+        background-color: #2E7D32;
+      }
+
+      .color_4 {
+        background-color: #4E342E;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+    
+    <simple-carousel>
+      <carousel-slide class="color_2">10 seconds</carousel-slide>
+      <carousel-slide class="color_3">10 seconds</carousel-slide>
+      <carousel-slide class="color_4">10 seconds</carousel-slide>
+    </simple-carousel>
+
+    <simple-carousel next-slide-delay="4000">
+      <carousel-slide class="color_3">4 seconds</carousel-slide>
+      <carousel-slide class="color_4">4 seconds</carousel-slide>
+      <carousel-slide class="color_1">4 seconds</carousel-slide>
+      <carousel-slide class="color_2">4 seconds</carousel-slide>
+    </simple-carousel>
+
+    <simple-carousel prevent-auto-transition>
+      <carousel-slide class="color_1">Never</carousel-slide>
+      <carousel-slide class="color_2">Never</carousel-slide>
+      <carousel-slide class="color_3">Never</carousel-slide>
+    </simple-carousel>
+
+  </body>
+
+</html>
